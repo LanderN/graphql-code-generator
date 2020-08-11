@@ -917,8 +917,6 @@ export type IDirectiveResolvers${contextType} = ${name}<ContextType>;`
 
       const typeToUse = this.getTypeToUse(realType);
       const mappedType = this._variablesTransfomer.wrapAstTypeWithModifiers(typeToUse, original.type);
-      const subscriptionType = this._schema.getSubscriptionType();
-      const isSubscriptionType = subscriptionType && subscriptionType.name === parentName;
       let argsType = hasArguments
         ? `${
             this.convertName(
@@ -953,7 +951,7 @@ export type IDirectiveResolvers${contextType} = ${name}<ContextType>;`
         parentType,
         parentTypeSignature: this.getParentTypeForSignature(node),
       });
-      const mappedTypeKey = isSubscriptionType ? `${mappedType}, "${node.name}"` : mappedType;
+      const mappedTypeKey = mappedType;
 
       const signature: {
         name: string;
@@ -963,7 +961,7 @@ export type IDirectiveResolvers${contextType} = ${name}<ContextType>;`
       } = {
         name: node.name as any,
         modifier: this.config.avoidOptionals ? '' : '?',
-        type: isSubscriptionType ? 'SubscriptionResolver' : 'Resolver',
+        type: 'Resolver',
         genericTypes: [
           mappedTypeKey,
           parentTypeSignature,
